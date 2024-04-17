@@ -1,14 +1,16 @@
 import axios from 'axios';
 import React, { useEffect,useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 export default function Category() {
 
   const [categories, setcategories] = useState([]);
+  const navigate = useNavigate();
 
   const fetchCategories = async() =>{
     try{
       const response = await axios.get('http://localhost:4000/api/v1/categories');
-      //console.log(response.data.allCategories);
+      console.log(response.data.allCategories);
       setcategories(response.data.allCategories);
     }
     catch(err){
@@ -34,7 +36,7 @@ export default function Category() {
     <div className='grid  cursor-pointer grid-cols-3 mt-4 md:grid-cols-4 lg:grid-cols-6 gap-5'>
     {
       categories.map( (ele,index)=>(
-        <div key={index} className='flex hover:scale-105 transition-all duration-200 flex-col gap-2 bg-blue-100 w-32 h-28 py-1 px-2 rounded-lg items-center justify-center'>
+        <div key={index} onClick={()=>navigate(`/${ele.name}`)} className='flex hover:scale-105 transition-all duration-200 flex-col gap-2 bg-blue-100 w-32 h-28 py-1 px-2 rounded-lg items-center justify-center'>
             <img src={ele.image} alt="" width={42} height={42}/>
             <p className='text-sm text-blue-500 font-semibold w-full text-center h-4'>{ele.name}</p>
         </div>

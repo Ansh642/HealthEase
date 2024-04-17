@@ -38,7 +38,7 @@ exports.createCategory =async(req,res)=>{
 
 exports.findAllCategories = async(req,res)=>{
     try{
-      const allCategories = await Category.find({}, '-_id -__v');
+      const allCategories = await Category.find({}, ' -__v');
       return res.status(200).json({
         success:true,
         allCategories
