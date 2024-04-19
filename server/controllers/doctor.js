@@ -73,3 +73,27 @@ exports.getDoctors  =async(req,res)=>{
         });
     }
 }
+
+
+exports.getDoctorsByName = async(req, res)=>{
+    try{
+      const name = req.params.name;
+      
+      const newName = name.slice(1,);
+
+      const allDoctors = await Category.find({name: newName}).populate("doctors");
+
+      return res.status(200).json({
+        success: true,
+        allDoctors
+      });
+
+    }
+    catch(err){
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
