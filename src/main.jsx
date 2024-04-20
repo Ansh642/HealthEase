@@ -9,7 +9,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
   <AuthProvider>
   <BrowserRouter>
-    <App />
+      <App />
+    
   </BrowserRouter>
   </AuthProvider>
 

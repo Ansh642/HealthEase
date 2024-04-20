@@ -1,10 +1,12 @@
 import axios from 'axios';
 import React, { useEffect } from 'react'
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Doctors() {
 
     const [doctors, setdoctors] = useState([]);
+    const navigate =  useNavigate();
     
     const fetchDoctors = async(req,res)=>{
     try{
@@ -31,7 +33,7 @@ export default function Doctors() {
          {
             doctors.map( (ele,index)=>(
                 <div className=' border-[2px] border-gray-200 px-3 py-4 w-64 h-fit flex cursor-pointer hover:scale-105 transition-all duration-200 flex-col items-start justify-start rounded-xl gap-3'>
-                    <img src={ele.image} alt="" className='object-contain rounded-xl h-36 mt-1 w-full'/>
+                    <img src={ele.image} alt="" className='object-contain rounded-xl h-36 mt-1 w-full' onClick={()=>navigate(`/doctor/${ele._id}`)}/>
                     <div className='text-start bg-blue-200 text-blue-600 font-semibold rounded-2xl px-2 py-1 text-sm'>
                         {ele.category.name}
                     </div>

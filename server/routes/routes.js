@@ -3,7 +3,7 @@ const router = express.Router();
 
 
 const {createCategory,findAllCategories} = require("../controllers/category");
-const { createDoctor, getDoctors, getDoctorsByName } = require("../controllers/doctor");
+const { createDoctor, getDoctors, getDoctorsByName, doctorDetails } = require("../controllers/doctor");
 const { signup, login, resetPassword } = require("../controllers/auth");
 
 // category routes
@@ -14,7 +14,7 @@ router.get('/categories',findAllCategories);
 router.post('/create-doctor',createDoctor);
 router.get('/doctors',getDoctors);
 router.get('/doctors/:name',getDoctorsByName);
-
+router.get('/doctor/:id',doctorDetails);
 
 //user routes
 router.post('/signup',signup);

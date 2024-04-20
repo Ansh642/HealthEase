@@ -18,7 +18,6 @@ export function AuthProvider({children}){
         {
             const parseData = JSON.parse(data);
             setauth({
-                
                 user: parseData.userDetails,
                 token: parseData.token,
             })

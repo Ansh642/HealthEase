@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Doctor = require("../models/Doctors");
 const Category = require("../models/Category");
 const {uploadImageToCloudinary} = require('../utils/imageUpload');
@@ -78,7 +79,6 @@ exports.getDoctors  =async(req,res)=>{
 exports.getDoctorsByName = async(req, res)=>{
     try{
       const name = req.params.name;
-      
       const newName = name.slice(1,);
 
       const allDoctors = await Category.find({name: newName}).populate("doctors");
@@ -97,3 +97,34 @@ exports.getDoctorsByName = async(req, res)=>{
     }
 }
 
+
+exports.doctorDetails = async (req, res) => {
+    try {
+        
+        let id = req.params.id.trim(); // Remove leading and trailing whitespace
+        id = id.replace(/^:/, ''); // Remove leading colon if present
+
+        const doctorDetails = await Doctor.findById(id).populate("category");
+
+        const otherDoctors = await Doctor.find({
+            _id:{
+                $ne : id,
+            }
+        }).populate("category");
+
+
+        return res.status(200).json({
+            success: true,
+            doctorDetails,
+            otherDoctors,
+        });
+
+    } 
+    
+    catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
+}

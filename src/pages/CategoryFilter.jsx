@@ -28,7 +28,6 @@ export default function CategoryFilter() {
    const fetchDoctors = async(req,res)=>{
     try{
         const response = await axios.get(`http://localhost:4000/api/v1/doctors/:${location.name}`);
-        console.log(response.data.allDoctors);
         setdoctors(response.data.allDoctors);
     }
     catch(err){
