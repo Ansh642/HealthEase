@@ -10,7 +10,7 @@ export default function Footer() {
             <div className="flex justify-center text-teal-600 sm:justify-start">
               <img src={logo} height={60} width={70} alt />
             </div>
-            <p className="mt-4 text-center text-gray-800 lg:mt-0 lg:text-right">
+            <p className="mt-4 text-center text-black font-medium lg:mt-0 lg:text-right">
               Copyright © 2024. All rights reserved.
             </p>
           </div>

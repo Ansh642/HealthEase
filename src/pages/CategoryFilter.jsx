@@ -76,7 +76,7 @@ export default function CategoryFilter() {
               
               {category.doctors.map((doctor, idx) => (
                 <div key={idx} className='border-[2px] border-gray-200 px-3 py-3 w-60 h-fit flex cursor-pointer transition-all duration-200 flex-col items-start justify-start rounded-xl gap-3'>
-                  <img src={doctor.image} alt='' className='object-contain rounded-xl h-36 mt-1 w-full' /> {/* Include only the doctor's image */}
+                  <img src={doctor.image} alt='' className='object-contain rounded-xl h-36 mt-1 w-full' onClick={()=>navigate(`/doctor/${doctor._id}`)}/> {/* Include only the doctor's image */}
                   <div className='text-start bg-blue-200 text-blue-600 font-semibold rounded-2xl px-2 py-1 text-sm'>
                 {category?.name}
               </div>

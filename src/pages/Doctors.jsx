@@ -27,6 +27,8 @@ export default function Doctors() {
 
   return (
     <div className='mb-20 px-12 ml-24'>
+
+        
         <h2 className='text-3xl font-semibold'>Popular Doctors</h2>
 
         <div className='grid mt-4 lg:grid-cols-4 lg:w-[92%] md:w-[95%]  md:grid-cols-3 sm:grid-cols-2 lg:gap-6 md:gap-3 sm:gap-2 items-center justify-center'>

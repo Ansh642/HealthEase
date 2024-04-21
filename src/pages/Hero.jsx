@@ -1,5 +1,6 @@
 import React from 'react'
 import image from '../assets/doctors.jpg'
+import { Link } from 'react-router-dom'
 
 export default function Hero() {
   return (
@@ -24,9 +25,9 @@ export default function Hero() {
           quidem quam repellat.
         </p>
 
-        <div className="mt-8 inline-block rounded bg-blue-600 px-8 py-3 text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring focus:ring-yellow-400">
+        <Link to='/explore' className="mt-8 inline-block cursor-pointer rounded bg-blue-600 px-8 py-3 text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring focus:ring-yellow-400">
           Explore Now
-        </div>
+        </Link>
       </div>
     </div>
      </div>

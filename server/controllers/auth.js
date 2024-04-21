@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Booking = require("../models/Booking");
 const bcrypt  =require("bcrypt");
 require("dotenv").config();
 const JWT= require("jsonwebtoken");
@@ -171,3 +172,57 @@ exports.resetPassword = async(req,res)=>{
         });
     }
 }
+
+
+exports.bookAppointment = async(req,res)=>{
+  
+    try{
+      const userId = req.user.id;
+      const {date,time,id} = req.body;
+
+      if(!date || !time)
+      {
+        return res.status(404).json({
+          success : false,
+          message : "Please enter date and time",
+        })
+      }
+
+      if(!userId) {
+        return res.status(404).json({
+          success : false,
+          message : 'User must be logged in',
+        })
+      }
+      
+      //Update bookings
+      const newBooking = await Booking.create({
+        date : date,
+        time : time,
+        user : userId,
+      });
+
+      // now update user 
+      const updatedUser  = await User.findByIdAndUpdate(userId,{
+        $push:{
+          bookings : newBooking._id,
+        }
+      },{new:true}).exec();
+
+
+      return res.status(200).json({
+        success : true,
+        message : "Book Appointment successfully",
+        newBooking,
+        updatedUser
+      })
+    }
+
+    catch(err){
+        return res.status(500).json({
+            success : false,
+            message : err.message
+        })
+    }
+}
+

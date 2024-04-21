@@ -8,7 +8,7 @@ import Explore from './pages/Explore'
 import ContactUs from './pages/ContactUs'
 import ResetPass from './pages/ResetPass'
 import DoctorFilter from './pages/DoctorFilter'
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
 
