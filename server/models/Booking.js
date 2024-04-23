@@ -11,9 +11,9 @@ const bookingSchema = new mongoose.Schema({
         required: true,
     },
 
-    user:{
+    doctor:{
         type : mongoose.Schema.Types.ObjectId,
-        ref : "User"
+        ref : "Doctor"
     },
 
 });

@@ -72,7 +72,7 @@ export default function Navbar() {
           <div className={`w-36 h-28 bg-white border-[1px] border-gray-300 shadow-lg z-30 right-16 absolute rounded-lg px-1 py-1 visible top-14 cursor-pointer ${show === true ? `visible` : `invisible`}`}>
             <div className='flex flex-col gap-2 justify-start px-1 py-1 text-lg mt-2 '>
 
-            <p className="text-blue-700 hover:bg-blue-100 rounded-lg px-2 py-1" onClick={()=>{setShow(false)}}>Bookings</p>
+            <p className="text-blue-700 hover:bg-blue-100 rounded-lg px-2 py-1" onClick={()=>{setShow(false);navigate('/bookings')}}>Bookings</p>
             <p className="text-blue-700 hover:bg-blue-100 rounded-lg px-2 py-1" onClick={logoutHandler}>Log out</p>
             
             </div>

@@ -199,7 +199,7 @@ exports.bookAppointment = async(req,res)=>{
       const newBooking = await Booking.create({
         date : date,
         time : time,
-        user : userId,
+        doctor : id,
       });
 
       // now update user 
@@ -224,5 +224,29 @@ exports.bookAppointment = async(req,res)=>{
             message : err.message
         })
     }
+}
+
+exports.getBookings = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).populate({
+      path: "bookings",
+      populate: {
+        path: "doctor"
+      }
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Bookings successfully fetched",
+      user
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
 }
 
