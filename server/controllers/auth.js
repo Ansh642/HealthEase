@@ -1,8 +1,9 @@
 const User = require("../models/User");
 const Booking = require("../models/Booking");
 const bcrypt  =require("bcrypt");
-require("dotenv").config();
 const JWT= require("jsonwebtoken");
+require("dotenv").config();
+
 
 exports.signup = async(req,res)=>{
     try{
@@ -94,13 +95,12 @@ exports.login =async(req,res)=>{
             expiresIn: "1d",
         });
 
- 
         return res.status(200).json({
-            success: true,
-            message: "Logged in successfully",
-            userDetails,
-            token
-        })
+          success: true,
+          message: "Logged in successfully",
+          userDetails,
+          token
+      });
 
     
     } else {
@@ -112,10 +112,10 @@ exports.login =async(req,res)=>{
   }
     catch(err)
     {
-        return res.status(500).json({
-            success : false,
-            message : err.message
-        });
+      return res.status(500).json({
+          success : false,
+          message : err.message
+      });
     }
 }
 
@@ -226,6 +226,7 @@ exports.bookAppointment = async(req,res)=>{
     }
 }
 
+
 exports.getBookings = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -240,9 +241,39 @@ exports.getBookings = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Bookings successfully fetched",
-      user
+      bookings : user.bookings
     });
-  } catch (err) {
+  } 
+  catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+}
+
+
+exports.cancelBooking = async(req,res)=>{
+  try{
+    const {id} = req.body;
+    const userId= req.user.id;
+
+    const removeBookingfromUser = await User.findByIdAndUpdate(userId,{
+      $pull:{
+        bookings: id,
+      }
+    }).exec();
+
+    const deleteBooking = await Booking.findByIdAndDelete(id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Bookings successfully deleted",
+    });
+
+
+  }
+  catch(err){
     return res.status(500).json({
       success: false,
       message: err.message

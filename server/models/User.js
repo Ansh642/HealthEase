@@ -21,10 +21,10 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
 
-    bookings:{
+    bookings:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Booking", 
-    },
+    }],
 });
 
 module.exports = mongoose.model("User", userSchema);

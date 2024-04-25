@@ -1,4 +1,4 @@
-import { useState,useEffect, createContext } from "react";
+import { useState, useEffect, createContext } from "react";
 import axios from "axios";
 
 export const AppContext = createContext();
@@ -10,29 +10,30 @@ export function AuthProvider({children}){
         token : "",
     });
 
-    axios.defaults.headers.common['Authorization'] = auth?.token;
-    
-    useEffect ( ()=>{
+    useEffect(() => {
         const data = localStorage.getItem("auth");
-        if(data)
-        {
+        if(data) {
             const parseData = JSON.parse(data);
             setauth({
                 user: parseData.userDetails,
                 token: parseData.token,
-            })
+            });
         }
-    },[]);
+    }, []);
 
-    const value={
-        auth,setauth,
-    }
+    useEffect(() => {
+        axios.defaults.headers.common['Authorization'] = auth.token ? `Bearer ${auth.token}` : null;
+    }, [auth.token]);
+
+    const value = {
+        auth,
+        setauth,
+    };
     
-    return <AppContext.Provider value={value}>
-        {children}
-    </AppContext.Provider>
-
+    return (
+        <AppContext.Provider value={value}>
+            {children}
+        </AppContext.Provider>
+    );
 }
-
-
 

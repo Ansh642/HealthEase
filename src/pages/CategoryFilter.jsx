@@ -83,7 +83,7 @@ export default function CategoryFilter() {
                   <p className='font-bold text-sm'>{doctor.name}</p>
                   <p className='text-blue-500 text-sm font-medium -mt-2'>{doctor.years} Years</p>
                   <p className='text-gray-500 -mt-2'>{doctor.address}</p>
-                  <button className='w-full px-4 py-1 rounded-2xl mt-1 cursor-pointer border-[1px] border-blue-400 text-blue-500 hover:bg-blue-500 transition-all duration-200 hover:text-black text-sm'>Book Now</button>
+                  <button className='w-full px-4 py-1 rounded-2xl mt-1 cursor-pointer border-[1px] border-blue-400 text-blue-500 hover:bg-blue-500 transition-all duration-200 hover:text-black text-sm' onClick={()=>navigate(`/doctor/${doctor._id}`)}>Book Now</button>
                 </div>
               ))}
             </div>
