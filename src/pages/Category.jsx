@@ -28,7 +28,7 @@ export default function Category() {
       <p className='text-xl text-gray-500 text-center'>Search Your Doctor and Book Appointment in one click</p>
 
       <div className="flex w-full max-w-sm mt-2 sm:w-[90%] items-center space-x-2">
-      <input type="email" placeholder="Search..." className="rounded-[7px] px-3 capitalize py-2 w-full outline-none border-[1px] border-gray-500" />
+      <input type="text" placeholder="Search..." className="rounded-[7px] px-3 capitalize py-2 w-full outline-none border-[1px] border-gray-500" />
       <button className='bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 px-3 py-2 rounded-[5px]'>Search</button>
     </div>
 

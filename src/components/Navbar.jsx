@@ -45,20 +45,21 @@ export default function Navbar() {
   return (
     <div className='flex gap-7 items-center justify-between shadow-md w-full px-24 h-[65px]'>
 
-    <div className='flex gap-10 items-center'>
+    <div className='flex gap-10 items-center ml-6'>
     <img src={logo} alt="" width={40} height={40} onClick={()=>navigate('/')} className='cursor-pointer'/>
        
-        <ul className='md:flex flex-row gap-8 hidden ml-14'>
-            {
-            menu.map( (item ,index) => (
-              <div key={index}>
-                <Link  to={item.path}>
-                    <li className='cursor-pointer text-[17px] hover:text-blue-600'>{item.name}</li>
-                </Link>
-              </div>
-            ))
-            }
-        </ul>
+      <ul className='md:flex flex-row gap-8 hidden ml-28'>
+          {
+          menu.map( (item ,index) => (
+            <div key={index}>
+              <Link  to={item.path}>
+                  <li className='cursor-pointer text-[17px] hover:text-blue-600'>{item.name}</li>
+              </Link>
+            </div>
+          ))
+          }
+      </ul>
+
     </div>
 
     <div>
