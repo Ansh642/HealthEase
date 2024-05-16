@@ -10,6 +10,7 @@ import ResetPass from './pages/ResetPass'
 import DoctorFilter from './pages/DoctorFilter'
 import { Toaster } from 'react-hot-toast';
 import Booking from './pages/Booking'
+import SearchFilter from './pages/SearchFilter'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
        <Route path='/explore' element={<Explore/>}/>
        <Route path='/contact' element={<ContactUs/>}/>
        <Route path='/bookings' element={<Booking/>}/>
+       <Route path='/search' element={<SearchFilter/>}/>
       </Routes>
       <Toaster />
     </div>

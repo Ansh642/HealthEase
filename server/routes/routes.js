@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const {createCategory,findAllCategories} = require("../controllers/category");
-const { createDoctor, getDoctors, getDoctorsByName, doctorDetails } = require("../controllers/doctor");
+const { createDoctor, getDoctors, getDoctorsByName, doctorDetails, searchDoctor } = require("../controllers/doctor");
 const { signup, login, resetPassword, bookAppointment, getBookings, cancelBooking } = require("../controllers/auth");
 const { auth } = require("../middleware/middleware");
 
@@ -23,6 +23,7 @@ router.post('/book-appointment',auth,bookAppointment)
 router.post('/reset-password',resetPassword);
 router.get('/get-bookings',auth,getBookings);
 router.post('/delete-booking',auth,cancelBooking);
+router.post('/search',searchDoctor);
 
 module.exports = router; 
 

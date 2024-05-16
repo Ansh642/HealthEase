@@ -128,3 +128,46 @@ exports.doctorDetails = async (req, res) => {
         });
     }
 }
+
+
+exports.searchDoctor = async (req, res) => {
+    try {
+      let { search } = req.body;
+  
+      if (!search) {
+        return res.status(400).json({
+          success: false,
+          message: "Search term is required",
+        });
+      }
+  
+      // Preprocess the search term: remove dots and common prefixes
+      search = search.replace(/\./g, '').replace(/^(Dr|Mr|Mrs|Ms)\s+/i, '');
+  
+      // Construct the regex pattern for case-insensitive match
+      const regex = new RegExp(search, 'i');
+  
+      // Perform the MongoDB query using the regex pattern
+      const similarDoctors = await Doctor.find({
+        name: { $regex: regex }
+      }).populate("category");
+  
+      return res.status(200).json({
+        success: true,
+        message: "Related doctors fetched successfully",
+        similarDoctors,
+      });
+    } catch (err) {
+      console.error("Error fetching doctors:", err);
+      return res.status(500).json({
+        success: false,
+        message: "Error fetching doctors",
+        error: err.message,
+      });
+    }
+};
+
+  
+  
+
+

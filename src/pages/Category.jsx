@@ -1,11 +1,14 @@
 import axios from 'axios';
-import React, { useEffect,useState } from 'react'
+import React, { useContext, useEffect,useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { DoctorContext } from '../context/Doctors';
 
 export default function Category() {
 
   const [categories, setcategories] = useState([]);
   const navigate = useNavigate();
+  const [search, setsearch] = useState("");
+  const {doctor, setdoctor} = useContext(DoctorContext);
 
   const fetchCategories = async() =>{
     try{
@@ -17,9 +20,36 @@ export default function Category() {
     }
   }
 
+  const searchHandler = async()=>{
+    
+    try{
+      const response = await axios.post('http://localhost:4000/api/v1/search',{
+      search,
+      });
+
+      if(response.data.similarDoctors){
+        setdoctor({
+          doctors:response.data.similarDoctors,
+        })
+        
+        navigate("/search");
+      }
+
+      else{
+        console.log("No similar doctors found");
+      }
+
+    }
+    catch(err){
+      console.log(err.message);
+      toast.error(err.message);
+    }
+  }
+
   useEffect( ()=>{
     fetchCategories();
   },[]);
+
 
   return (
     <div>
@@ -28,8 +58,8 @@ export default function Category() {
       <p className='text-xl text-gray-500 text-center'>Search Your Doctor and Book Appointment in one click</p>
 
       <div className="flex w-full max-w-sm mt-2 sm:w-[90%] items-center space-x-2">
-      <input type="text" placeholder="Search..." className="rounded-[7px] px-3 capitalize py-2 w-full outline-none border-[1px] border-gray-500" />
-      <button className='bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 px-3 py-2 rounded-[5px]'>Search</button>
+      <input type="text" placeholder="Search..." className="rounded-[7px] px-3 capitalize py-2 w-full outline-none border-[1px] border-gray-500" value={search} onChange={(e)=>setsearch(e.target.value)} />
+      <button className='bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 px-3 py-2 rounded-[5px]' onClick={searchHandler}>Search</button>
     </div>
 
     <div className='grid  cursor-pointer grid-cols-3 mt-4 md:grid-cols-4 lg:grid-cols-6 gap-5'>
