@@ -8,12 +8,15 @@ const bcrypt  =require("bcrypt");
 exports.createDoctor = async(req,res)=>{
     try{
 
-     const {name,password,email,years,about,address,phone,category}= req.body;
-     const image = req.files.image;
+     const {name,password,email,experience,about,location,category}= req.body;
+     const image = req.files.photo;
+
+     //console.log(about);
      
      const categoryDetails  = await Category.findOne({name:category});
+     
 
-     if(!image || !password || !email || !years || !about || !address || !phone){
+     if(!image || !password || !email || !experience || !about || !location){
         return res.status(400).json({
             success: false,
             message: "Please enter complete details",
@@ -21,20 +24,21 @@ exports.createDoctor = async(req,res)=>{
      }
 
      const thumbnailImage = await uploadImageToCloudinary(image,process.env.FOLDER_NAME);
-
      const newpassword = await bcrypt.hash(password,10);
 
      const newDoctor = await Doctor.create({
         name,
         password:newpassword,
-        years,
+        years:experience,
         about,
-        address,
-        phone,
+        address:location,
         email,
         image: thumbnailImage.secure_url,
         category : categoryDetails._id,
+        phone: 8171579897,
      });
+
+     console.log(newDoctor);
 
       //insert doctor in that particular category
      const newDetails = await Category.findByIdAndUpdate(categoryDetails._id,{

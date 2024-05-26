@@ -114,13 +114,20 @@ export default function Signup() {
             >
               Sign Up
             </button>
+
+            <Link to="/login" className="text-blue-500 hover:text-blue-600 text-center font-normal">
+          Already a User?
+        </Link>
+
           </div>
         </form>
         <p className="text-center text-gray-500 text-xs">©2024 HealthEase. All rights reserved.</p>
 
-        <Link to="/login" className="mt-3 text-blue-500 hover:text-blue-600 text-center font-normal">
-          Already a User?
+        <Link to="/signup-doctor" className="mt-3 text-blue-500 hover:text-blue-600 text-center font-normal">
+          Are You a Doctor?
         </Link>
+        
+        
       </div>
 
       <Footer />

@@ -46,7 +46,7 @@ export default function CategoryFilter() {
     <>
     <Navbar/>
     
-    <div className='flex flex-row min-h-[65vh] px-10 mt-5 '>
+    <div className='flex flex-row min-h-[85vh] px-10 mt-5 '>
        
       <div className='flex flex-col gap-3 w-[15%] border-r-[1px] border-gray-300'>
         <p className='text-sm font-semibold text-gray-500 capitalize'>Other Categories</p>
@@ -69,10 +69,10 @@ export default function CategoryFilter() {
       <div className='flex flex-col gap-3 w-[70%] px-7'>
         <p className='font-semibold text-pretty text-3xl'>{location.name}</p>
 
-        <div className='grid mt-4 mb-10 lg:grid-cols-3 lg:w-[92%] md:w-[95%]  md:grid-cols-2 sm:grid-cols-1 lg:gap-8 md:gap-3 sm:gap-2 items-center justify-center'>
+        <div className='flex items-center mt-3'>
         {
           doctors.map((category, index) => (
-            <div key={index} >
+            <div key={index} className='flex flex-row gap-10'>
               
               {category.doctors.map((doctor, idx) => (
                 <div key={idx} className='border-[2px] border-gray-200 px-3 py-3 w-60 h-fit flex cursor-pointer transition-all duration-200 flex-col items-start justify-start rounded-xl gap-3'>

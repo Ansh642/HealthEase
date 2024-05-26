@@ -9,7 +9,6 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { ImSad } from "react-icons/im";
 
-
 export default function Booking() {
 
   const [select, setselect] = useState("Upcoming");
