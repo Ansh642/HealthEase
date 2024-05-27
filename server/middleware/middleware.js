@@ -29,3 +29,26 @@ exports.auth = async (req, res, next) => {
         });
     }
 };
+
+
+exports.isDoctor = async(req, res, next) => {
+    try{
+      const {userType} = req.user;
+
+      if(userType!=="Doctor")
+        {
+            return res.status(200).json({
+                success: false,
+                message: "Protected route for doctor",
+            });
+        }
+    }
+    catch(err){
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+

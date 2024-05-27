@@ -12,6 +12,8 @@ import { Toaster } from 'react-hot-toast';
 import Booking from './pages/Booking'
 import SearchFilter from './pages/SearchFilter'
 import DoctorSignup from './pages/doctor/DoctorSignup'
+import Private from './pages/Private'
+import Appointments from './pages/doctor/Appointments'
 
 function App() {
 
@@ -27,12 +29,20 @@ function App() {
        <Route path='/doctor/:id' element={<DoctorFilter/>}/>
        <Route path='/explore' element={<Explore/>}/>
        <Route path='/contact' element={<ContactUs/>}/>
-       <Route path='/bookings' element={<Booking/>}/>
        <Route path='/search' element={<SearchFilter/>}/>
+
+       <Route path="/" element={<Private/>}> 
+         <Route path='bookings' element={<Booking/>}/>
+       </Route>
+
+       <Route path="/" element={<Private/>}> 
+         <Route path='appointments' element={<Appointments/>}/>
+       </Route>
+
       </Routes>
       <Toaster />
     </div>
   )
 }
-
+ 
 export default App

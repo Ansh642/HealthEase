@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Booking = require("../models/Booking");
+const Doctor = require("../models/Doctors");
 const bcrypt  =require("bcrypt");
 const JWT= require("jsonwebtoken");
 require("dotenv").config();
@@ -61,63 +62,66 @@ exports.signup = async(req,res)=>{
 }
 
 
-exports.login =async(req,res)=>{
-    try{
-      const {email,password} = req.body;
+exports.login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-      if(!email || !password)
-      {
-        return res.status(400).json({
-            success : false,
-            message : "Please enter complete details",
-        });
-      }
-
-      const userDetails = await User.findOne({email});
-
-      if(!userDetails)
-      {
-        return res.status(400).json({
-            success : false,
-            message : "User not found",
-        })
-      }
-
-      if (await bcrypt.compare(password, userDetails.password))
-       {
-        const payload={
-            email: userDetails.email,
-            id: userDetails._id,
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "Please enter complete details",
+            });
         }
 
-        //create a token it returns a string 
-        const token = JWT.sign(payload, process.env.JWT_SECRET, {
-            expiresIn: "1d",
-        });
+        let userDetails = await User.findOne({ email });
+        let userType = 'User';
 
-        return res.status(200).json({
-          success: true,
-          message: "Logged in successfully",
-          userDetails,
-          token
-      });
+        if (!userDetails) {
+            userDetails = await Doctor.findOne({ email });
+            userType = 'Doctor';
+        }
 
-    
-    } else {
-        return res.status(401).json({
+        if (!userDetails) {
+            return res.status(400).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, userDetails.password);
+
+        if (isPasswordValid) {
+            const payload = {
+                email: userDetails.email,
+                id: userDetails._id,
+                userType: userType
+            };
+
+            const token = JWT.sign(payload, process.env.JWT_SECRET, {
+                expiresIn: "1d",
+            });
+
+            return res.status(200).json({
+                success: true,
+                message: "Logged in successfully",
+                userDetails,
+                token
+            });
+
+        } else {
+            return res.status(401).json({
+                success: false,
+                message: "Password is incorrect",
+            });
+        }
+    } catch (err) {
+        return res.status(500).json({
             success: false,
-            message: `Password is incorrect`,
+            message: err.message
         });
     }
-  }
-    catch(err)
-    {
-      return res.status(500).json({
-          success : false,
-          message : err.message
-      });
-    }
-}
+};
+
 
 
 exports.resetPassword = async(req,res)=>{

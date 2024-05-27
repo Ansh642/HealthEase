@@ -5,10 +5,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { AppContext } from '../context/User';
+import {DoctorContext} from '../context/Doctors'
 
 export default function Login() {
   const navigate = useNavigate();
   const { auth, setauth } = useContext(AppContext);
+  const {doctor,setdoctor} = useContext(DoctorContext);
+
 
   const [formData, setFormData] = useState({
     email: '',
