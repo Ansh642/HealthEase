@@ -35,10 +35,11 @@ export default function Booking() {
   },[])
 
 
-  const cancelAppointment =async(id)=>{
+  const cancelAppointment =async(id,docId)=>{
     try{
       const response = await axios.post('http://localhost:4000/api/v1/delete-booking',{
-        id:id
+        id,
+        docId,
       });
 
       if(response.data.success)
@@ -81,7 +82,7 @@ export default function Booking() {
                 <p className='flex flex-row gap-1 items-center'> <CiClock1   size={20} /> At - <span className='font-medium'>{ele.time} hours</span></p>
               </div>
 
-              <button className='ml-[700px] mb-32 border-2 h-fit w-fit rounded-lg border-blue-500 text-blue-500 font-medium text-sm hover:bg-blue-500 hover:text-white transition-all duration-200 bg-white px-2 py-1' onClick={() => cancelAppointment(ele._id)}>
+              <button className='ml-[700px] mb-32 border-2 h-fit w-fit rounded-lg border-blue-500 text-blue-500 font-medium text-sm hover:bg-blue-500 hover:text-white transition-all duration-200 bg-white px-2 py-1' onClick={() => cancelAppointment(ele._id,ele.doctor._id)}>
                 Cancel Appointment
               </button>
             </div>

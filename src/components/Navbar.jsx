@@ -54,6 +54,7 @@ export default function Navbar() {
   }
 
   return (
+
     <div className='flex gap-7 items-center justify-between shadow-md w-full px-24 h-[65px]'>
 
     <div className='flex gap-10 items-center ml-6'>
@@ -107,5 +108,6 @@ export default function Navbar() {
 
     
     </div>
+    
   )
 }

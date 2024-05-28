@@ -204,6 +204,7 @@ exports.bookAppointment = async(req,res)=>{
         date : date,
         time : time,
         doctor : id,
+        user : userId,
       });
 
       // now update user 
@@ -213,13 +214,20 @@ exports.bookAppointment = async(req,res)=>{
         }
       },{new:true}).exec();
 
+      const updatedDoctor = await Doctor.findByIdAndUpdate(id,{
+        $push:{
+          appointments:newBooking._id,
+        }
+      },{new:true}).exec();
+
 
       return res.status(200).json({
         success : true,
         message : "Book Appointment successfully",
         newBooking,
-        updatedUser
-      })
+        updatedUser,
+        updatedDoctor,
+      });
     }
 
     catch(err){
@@ -261,10 +269,17 @@ exports.cancelBooking = async(req,res)=>{
   try{
     const {id} = req.body;
     const userId= req.user.id;
+    const {docId}= req.body;
 
     const removeBookingfromUser = await User.findByIdAndUpdate(userId,{
       $pull:{
         bookings: id,
+      }
+    }).exec();
+
+    const removeBookingfromDoctor  =await Doctor.findByIdAndUpdate(docId,{
+      $pull:{
+        appointments: id,
       }
     }).exec();
 

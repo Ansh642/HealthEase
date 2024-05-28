@@ -13,18 +13,20 @@ import { ImSad } from "react-icons/im";
 export default function Appointments() {
 
   const [select, setselect] = useState("Upcoming");
-  const [bookings, setbookings] = useState([]);
+  const [bookings, setbookings] = useState();
   const navigate = useNavigate();
   
 
   useEffect( ()=>{
-    const fetchDetails =async(req,res)=>{
+    const fetchDetails = async(req,res)=>{
       try{
-        const response = await axios.get("http://localhost:4000/api/v1/get-bookings");
+        const response = await axios.get("http://localhost:4000/api/v1/get-appointments");
   
         if(response.data.success)
         {
-          setbookings(response.data.bookings);
+          console.log("Appointments:")
+          console.log(response.data.appointments); 
+          setbookings(response.data.appointments);
         }
       }
       catch(err){
@@ -38,7 +40,7 @@ export default function Appointments() {
 
   const cancelAppointment =async(id)=>{
     try{
-      const response = await axios.post('http://localhost:4000/api/v1/delete-booking',{
+      const response = await axios.post('http://localhost:4000/api/v1/delete-appointment',{
         id:id
       });
 
@@ -61,7 +63,7 @@ export default function Appointments() {
         <Navbar/>
 
        <div className='px-24 py-6 flex flex-col min-h-[68vh]'> 
-        <h1 className='text-3xl font-semibold'>My Bookings</h1>
+        <h1 className='text-3xl font-semibold'>My Appointments</h1>
         <div className='w-full flex flex-row items-center justify-start px-5 py-6 gap-5 h-10 mt-3 rounded-lg bg-blue-100'>
 
         <p className={`${select === "Upcoming" ? `bg-white px-3 py-1 rounded-lg` : ``} cursor-pointer`} onClick={()=>setselect("Upcoming")}>Upcoming</p>
@@ -74,11 +76,11 @@ export default function Appointments() {
         bookings && bookings.length > 0 ? (
           bookings.map((ele, index) => (
             <div className='flex flex-row gap-3 h-fit w-full border-[1px] border-gray-300 mt-3 rounded-lg justify-start px-5 py-6' key={ele._id}>
-              <img src={ele.doctor.image} alt="" width={160} height={160}/>
+              <img src={ele.user.image} alt="" width={160} height={160}/>
 
               <div className='flex flex-col gap-2 mt-2'>
-                <p className='font-semibold text-[20px]'>{ele.doctor?.name}</p>
-                <p className='flex flex-row gap-1 items-center'> <TfiLocationPin size={20} /> Near {ele.doctor.address}</p>
+                <p className='font-semibold text-[20px] capitalize'>{ele?.user?.name}</p>
+                {/* <p className='flex flex-row gap-1 items-center'> <TfiLocationPin size={20} /> Near {ele.address}</p> */}
                 <p className='flex flex-row gap-1 items-center'> <CiCalendarDate  size={20} /> Appointment On : <span className='font-medium'>{ele.date}</span></p>
                 <p className='flex flex-row gap-1 items-center'> <CiClock1   size={20} /> At - <span className='font-medium'>{ele.time} hours</span></p>
               </div>

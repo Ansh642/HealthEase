@@ -171,7 +171,61 @@ exports.searchDoctor = async (req, res) => {
     }
 };
 
-  
+
+exports.getAppointments  =async(req, res)=>{
+    try{
+      const userId = req.user.id;
+
+      const doctor  = await Doctor.findById(userId).populate({
+        path : "appointments",
+        populate:{
+            path : "user",
+        }
+      });
+
+      //console.log(doctor.appointments);
+
+      return res.status(200).json({
+        success: true,
+        message: "Appointments fetched successfully",
+        appointments:doctor.appointments,
+      });
+
+    }
+    catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        })
+    }
+}
   
 
-
+exports.cancelAppointments = async(req,res)=>{
+    try{
+      const {id} = req.body;
+      const userId= req.user.id;
+  
+      const removeBooking = await Doctor.findByIdAndUpdate(userId,{
+        $pull:{
+          appointments: id,
+        }
+      }).exec();
+  
+      const deleteBooking = await Booking.findByIdAndDelete(id);
+  
+      return res.status(200).json({
+        success: true,
+        message: "Bookings successfully deleted",
+      });
+  
+  
+    }
+    catch(err){
+      return res.status(500).json({
+        success: false,
+        message: err.message
+      });
+    }
+  }
+  

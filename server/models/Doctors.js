@@ -41,7 +41,7 @@ const doctorSchema = new mongoose.Schema({
     },
     appointments:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"User", 
+        ref:"Booking", 
     }],
     phone:{
         type:Number,

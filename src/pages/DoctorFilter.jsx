@@ -40,6 +40,12 @@ export default function DoctorFilter() {
       toast.error('Log in first');
     }
 
+    if(auth.user.years)
+    {
+      toast.error("Only user can book a doctor");
+      return
+    }
+
     try{
       const response = await axios.post('http://localhost:4000/api/v1/book-appointment',{
         time: selectedTime,

@@ -10,11 +10,14 @@ const bookingSchema = new mongoose.Schema({
         type:String,
         required: true,
     },
-
     doctor:{
         type : mongoose.Schema.Types.ObjectId,
         ref : "Doctor"
     },
+    user:{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "User"
+    }
 
 });
 
