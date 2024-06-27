@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import axios from "axios";
 import { AppContext } from '../context/User';
 
@@ -25,6 +25,9 @@ export default function Private() {
 
   }, [auth?.token]);
 
-  return ok ? <Outlet /> : <h1 className="text-4xl font-semibold font-inter flex items-center justify-center mt-80">Please Login to see your Dashboard</h1>;
+  return ok ? <Outlet /> : (<>
+  <h1 className="text-4xl text-blue-700 font-semibold font-inter flex items-center justify-center mt-80">Please Login to see your Dashboard</h1>
+  <Link to="/" className="mx-auto text-blue-600 hover:underline cursor-pointer flex items-center justify-center mt-2 text-xl font-semibold"> Go Back </Link>
+  </>);
 }
 

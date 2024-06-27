@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const {createCategory,findAllCategories} = require("../controllers/category");
-const { createDoctor, getDoctors, getDoctorsByName, doctorDetails, searchDoctor, getAppointments, cancelAppointments } = require("../controllers/doctor");
+const { createDoctor, getDoctors, getDoctorsByName, doctorDetails, searchDoctor, getAppointments, completeAppointments } = require("../controllers/doctor");
 const { signup, login, resetPassword, bookAppointment, getBookings, cancelBooking } = require("../controllers/auth");
 const { auth, isDoctor } = require("../middleware/middleware");
 
@@ -18,7 +18,7 @@ router.get('/doctors/:name',getDoctorsByName);
 router.get('/doctor/:id',doctorDetails);
 router.get("/doctor-auth", auth,isDoctor, (req, res) => {res.status(200).send({ ok: true });});
 router.get('/get-appointments',auth,getAppointments);
-router.post('/delete-appointment',auth,cancelAppointments);
+router.post('/complete-appointment',auth,completeAppointments);
 
 //user routes
 router.post('/signup',signup);

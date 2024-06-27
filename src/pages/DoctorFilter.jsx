@@ -22,6 +22,9 @@ export default function DoctorFilter() {
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
 
+  const email = auth?.user?.email;
+  //console.log(email);
+
   const fetchDoctor = async () => {
     try {
       const response = await axios.get(`http://localhost:4000/api/v1/doctor/:${id}`);
@@ -50,7 +53,8 @@ export default function DoctorFilter() {
       const response = await axios.post('http://localhost:4000/api/v1/book-appointment',{
         time: selectedTime,
         date : selectedDate,
-        id
+        id,
+        email
       });
 
       if(response.data.success) {
@@ -62,11 +66,11 @@ export default function DoctorFilter() {
         navigate('/');
       }
       else{
-        toast.error(err.message);
+        toast.error(response.data.message);
       }
     }
     catch (err) {
-      toast.error(err.message);
+      toast.error("An error occurred while booking the appointment");
     }
   };
 

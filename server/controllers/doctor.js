@@ -4,6 +4,7 @@ const Category = require("../models/Category");
 const {uploadImageToCloudinary} = require('../utils/imageUpload');
 require("dotenv").config();
 const bcrypt  =require("bcrypt");
+const User = require('../models/User');
 
 exports.createDoctor = async(req,res)=>{
     try{
@@ -201,16 +202,21 @@ exports.getAppointments  =async(req, res)=>{
 }
   
 
-exports.cancelAppointments = async(req,res)=>{
+exports.completeAppointments = async(req,res)=>{
     try{
       const {id} = req.body;
       const userId= req.user.id;
+
+      console.log(id,userId);
   
       const removeBooking = await Doctor.findByIdAndUpdate(userId,{
         $pull:{
           appointments: id,
         }
       }).exec();
+
+      const removeBookingFromUser = await User.findById({id});
+      console.log(removeBookingFromUser);
   
       const deleteBooking = await Booking.findByIdAndDelete(id);
   
@@ -227,5 +233,5 @@ exports.cancelAppointments = async(req,res)=>{
         message: err.message
       });
     }
-  }
+}
   

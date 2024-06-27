@@ -2,7 +2,6 @@ import React,{useContext, useEffect, useState} from 'react'
 import Footer from '../../components/Footer'
 import Navbar from '../../components/Navbar'
 import { CiCalendarDate } from "react-icons/ci";
-import { TfiLocationPin } from "react-icons/tfi";
 import { CiClock1 } from "react-icons/ci";
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -24,7 +23,7 @@ export default function Appointments() {
   
         if(response.data.success)
         {
-          console.log("Appointments:")
+          
           console.log(response.data.appointments); 
           setbookings(response.data.appointments);
         }
@@ -40,7 +39,7 @@ export default function Appointments() {
 
   const cancelAppointment =async(id)=>{
     try{
-      const response = await axios.post('http://localhost:4000/api/v1/delete-appointment',{
+      const response = await axios.post('http://localhost:4000/api/v1/complete-appointment',{
         id:id
       });
 
@@ -85,8 +84,8 @@ export default function Appointments() {
                 <p className='flex flex-row gap-1 items-center'> <CiClock1   size={20} /> At - <span className='font-medium'>{ele.time} hours</span></p>
               </div>
 
-              <button className='ml-[700px] mb-32 border-2 h-fit w-fit rounded-lg border-blue-500 text-blue-500 font-medium text-sm hover:bg-blue-500 hover:text-white transition-all duration-200 bg-white px-2 py-1' onClick={() => cancelAppointment(ele._id)}>
-                Cancel Appointment
+              <button className='ml-[700px] mb-32 border-2 h-fit w-fit rounded-lg border-blue-500 text-blue-500 font-medium text-sm hover:bg-blue-500 hover:text-white transition-all duration-200 bg-white px-3 py-2' onClick={() => cancelAppointment(ele._id)}>
+                  Mark as done
               </button>
             </div>
           ))

@@ -3,6 +3,7 @@ const Booking = require("../models/Booking");
 const Doctor = require("../models/Doctors");
 const bcrypt  =require("bcrypt");
 const JWT= require("jsonwebtoken");
+const {mailsend} = require("../utils/mailsend");
 require("dotenv").config();
 
 
@@ -178,64 +179,74 @@ exports.resetPassword = async(req,res)=>{
 }
 
 
-exports.bookAppointment = async(req,res)=>{
-  
-    try{
-      const userId = req.user.id;
-      const {date,time,id} = req.body;
+exports.bookAppointment = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { date, time, id,email } = req.body;
 
-      if(!date || !time)
-      {
-        return res.status(404).json({
-          success : false,
-          message : "Please enter date and time",
-        })
-      }
-
-      if(!userId) {
-        return res.status(404).json({
-          success : false,
-          message : 'User must be logged in',
-        })
-      }
-      
-      //Update bookings
-      const newBooking = await Booking.create({
-        date : date,
-        time : time,
-        doctor : id,
-        user : userId,
-      });
-
-      // now update user 
-      const updatedUser  = await User.findByIdAndUpdate(userId,{
-        $push:{
-          bookings : newBooking._id,
-        }
-      },{new:true}).exec();
-
-      const updatedDoctor = await Doctor.findByIdAndUpdate(id,{
-        $push:{
-          appointments:newBooking._id,
-        }
-      },{new:true}).exec();
-
-
-      return res.status(200).json({
-        success : true,
-        message : "Book Appointment successfully",
-        newBooking,
-        updatedUser,
-        updatedDoctor,
+    if (!date || !time) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter date and time",
       });
     }
 
-    catch(err){
-        return res.status(500).json({
-            success : false,
-            message : err.message
-        })
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: 'User must be logged in',
+      });
     }
+
+    const appointmentDate = new Date(date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); 
+
+    if (appointmentDate < today) {
+      return res.status(400).json({
+        success: false,
+        message: "Appointment date cannot be before today's date",
+      });
+    }
+
+    // Update bookings
+    const newBooking = await Booking.create({
+      date: date,
+      time: time,
+      doctor: id,
+      user: userId,
+    });
+
+    // Now update user
+    const updatedUser = await User.findByIdAndUpdate(userId, {
+      $push: {
+        bookings: newBooking._id,
+      }
+    }, { new: true }).exec();
+
+    const updatedDoctor = await Doctor.findByIdAndUpdate(id, {
+      $push: {
+        appointments: newBooking._id,
+      }
+    }, { new: true }).exec();
+
+    const mail = await mailsend(email,'Your Appointment Schedule' ,`Your Appointment Schedule has been booked successfully at ${date} on ${time} hrs`);
+    console.log(mail);
+
+    return res.status(200).json({
+      success: true,
+      message: "Book Appointment successfully",
+      newBooking,
+      updatedUser,
+      updatedDoctor,
+    });
+    
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
 }
 
 
