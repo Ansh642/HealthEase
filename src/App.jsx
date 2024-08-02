@@ -14,6 +14,7 @@ import SearchFilter from './pages/SearchFilter'
 import DoctorSignup from './pages/doctor/DoctorSignup'
 import Private from './pages/Private'
 import Appointments from './pages/doctor/Appointments'
+import Ai from './pages/Ai'
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
        <Route path='/explore' element={<Explore/>}/>
        <Route path='/contact' element={<ContactUs/>}/>
        <Route path='/search' element={<SearchFilter/>}/>
+       <Route path='/ai' element={<Ai/>}/>
 
        <Route path="/" element={<Private/>}> 
          <Route path='bookings' element={<Booking/>}/>

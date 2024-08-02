@@ -44,7 +44,6 @@ export default function Navbar() {
 
   const handler = (e)=>{
     setShow(false);
-    console.log(auth.user);
     if(auth.user.years){
       navigate("/appointments");
     }

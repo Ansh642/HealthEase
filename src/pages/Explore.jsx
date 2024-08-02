@@ -30,7 +30,7 @@ export default function Explore() {
 
       if(response.data.success){
         setdoctors(response.data.allDoctors);
-        console.log(response.data.allDoctors);
+        //console.log(response.data.allDoctors);
       }
     }
     catch(err){

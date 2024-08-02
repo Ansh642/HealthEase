@@ -207,7 +207,7 @@ exports.completeAppointments = async(req,res)=>{
       const {id} = req.body;
       const userId= req.user.id;
 
-      console.log(id,userId);
+      //console.log(id,userId);
   
       const removeBooking = await Doctor.findByIdAndUpdate(userId,{
         $pull:{
@@ -224,7 +224,6 @@ exports.completeAppointments = async(req,res)=>{
         success: true,
         message: "Bookings successfully deleted",
       });
-  
   
     }
     catch(err){

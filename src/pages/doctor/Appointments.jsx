@@ -12,7 +12,7 @@ import { ImSad } from "react-icons/im";
 export default function Appointments() {
 
   const [select, setselect] = useState("Upcoming");
-  const [bookings, setbookings] = useState();
+  const [bookings, setbookings] = useState([]);
   const navigate = useNavigate();
   
 
@@ -23,8 +23,7 @@ export default function Appointments() {
   
         if(response.data.success)
         {
-          
-          console.log(response.data.appointments); 
+          //console.log(response.data.appointments); 
           setbookings(response.data.appointments);
         }
       }

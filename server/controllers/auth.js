@@ -7,6 +7,7 @@ const {mailsend} = require("../utils/mailsend");
 require("dotenv").config();
 
 
+
 exports.signup = async(req,res)=>{
     try{
        const {name,email,password,confirmPassword} = req.body;
@@ -182,7 +183,7 @@ exports.resetPassword = async(req,res)=>{
 exports.bookAppointment = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { date, time, id,email } = req.body;
+    const { date, time, id, email } = req.body;
 
     if (!date || !time) {
       return res.status(400).json({
@@ -209,38 +210,56 @@ exports.bookAppointment = async (req, res) => {
       });
     }
 
-    // Update bookings
-    const newBooking = await Booking.create({
-      date: date,
-      time: time,
+    // Create the new booking
+    const newBooking = new Booking({
+      date,
+      time,
       doctor: id,
       user: userId,
     });
 
-    // Now update user
-    const updatedUser = await User.findByIdAndUpdate(userId, {
-      $push: {
-        bookings: newBooking._id,
-      }
-    }, { new: true }).exec();
+    // Update user and doctor records and send email concurrently
+    const [savedBooking, updatedUser, updatedDoctor] = await Promise.all([
+      newBooking.save(),
+      User.findByIdAndUpdate(userId, { $push: { bookings: newBooking._id } }, { new: true }),
+      Doctor.findByIdAndUpdate(id, { $push: { appointments: newBooking._id } }, { new: true }),
+    ]);
 
-    const updatedDoctor = await Doctor.findByIdAndUpdate(id, {
-      $push: {
-        appointments: newBooking._id,
-      }
-    }, { new: true }).exec();
+    const emailBody = `
+      <div style="font-family: Arial, sans-serif; line-height: 1.5;">
+        <h2 style="color: #333;">Appointment Confirmation</h2>
+        <p style="font-size: 16px; color: #555;">
+          Dear ${email},
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          Your appointment has been successfully scheduled.
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          <strong>Date:</strong> ${date}<br>
+          <strong>Time:</strong> ${time} hrs
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          Thank you for scheduling with us. We look forward to seeing you.
+        </p>
+        <p style="font-size: 16px; color: #555;">
+          Best regards,<br>
+          HealthEase
+        </p>
+      </div>
+    `;
 
-    const mail = await mailsend(email,'Your Appointment Schedule' ,`Your Appointment Schedule has been booked successfully at ${date} on ${time} hrs`);
-    console.log(mail);
+    // Queue email sending, do not wait for it to complete
+    mailsend(email, 'Appointment Confirmation - Your Appointment Schedule', emailBody)
+      .catch(err => console.error("Error sending email:", err));
 
     return res.status(200).json({
       success: true,
-      message: "Book Appointment successfully",
-      newBooking,
+      message: "Appointment booked successfully",
+      newBooking: savedBooking,
       updatedUser,
       updatedDoctor,
     });
-    
+
   } catch (err) {
     return res.status(500).json({
       success: false,
@@ -253,7 +272,8 @@ exports.bookAppointment = async (req, res) => {
 exports.getBookings = async (req, res) => {
   try {
     const userId = req.user.id;
-
+    //console.log(userId);
+    
     const user = await User.findById(userId).populate({
       path: "bookings",
       populate: {
