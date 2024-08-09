@@ -125,7 +125,6 @@ exports.login = async (req, res) => {
 };
 
 
-
 exports.resetPassword = async(req,res)=>{
     try{
       const {email,password,confirmPassword} = req.body;
@@ -178,7 +177,6 @@ exports.resetPassword = async(req,res)=>{
         });
     }
 }
-
 
 exports.bookAppointment = async (req, res) => {
   try {
@@ -330,4 +328,73 @@ exports.cancelBooking = async(req,res)=>{
     });
   }
 }
+
+
+exports.sendMessage = async (req, res) => {
+
+  const { doctorId, message } = req.body;
+  const userId = req.user.id;
+
+  console.log(doctorId, message);
+
+  try {
+    
+    const doctor = await Doctor.findById(doctorId);
+    if (!doctor) {
+      return res.status(404).json({ success: false, message: 'Doctor not found' });
+    }
+
+    const newMessage = {
+      user: userId,
+      message: message,
+    };
+    doctor.messages.push(newMessage);
+    
+    
+    await doctor.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Message sent successfully'
+     });
+  } 
+  catch (error) 
+  {
+    res.status(500).json({
+      success: false,
+      message: 'Server error' });
+  }
+
+};
+
+
+exports.getMessages = async (req, res) => {
+  try {
+      const userId = req.user.id; // Assuming the authenticated user is a doctor
+      const user = await User.findById(userId).populate('messages.user', 'name'); // Populate user details
+
+      if (!user) {
+          return res.status(404).json({ success: false, message: 'User not found' });
+      }
+
+      res.status(200).json({ 
+          success: true, 
+          messages: user.messages.map(msg => ({
+              _id: msg._id,
+              message: msg.message,
+              userId: msg.user,
+              user: msg.user?.name,
+              timestamp: msg.createdAt
+          })) 
+      });
+  } catch (error) {
+      console.error('Error fetching messages:', error.message);
+      res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+
+
+
+
 

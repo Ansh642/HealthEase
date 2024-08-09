@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,7 +6,6 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 export default function Signup() {
-  
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -37,7 +36,7 @@ export default function Signup() {
       });
 
       if (response.data.success) {
-        toast.success("Registration Successfull!");
+        toast.success('Registration Successful!');
         navigate('/login');
       }
     } catch (err) {
@@ -46,92 +45,117 @@ export default function Signup() {
   };
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col justify-between bg-gray-50">
       <Navbar />
 
-      <div className="w-full max-w-xs mx-auto flex flex-col mt-10 max-h-[70vh]">
-        <form onSubmit={submitHandler} className="bg-white shadow-lg shadow-slate-300 rounded px-8 py-3 mb-4">
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-              Name
-            </label>
-            <input
-              onChange={handleOnChange}
-              className="shadow appearance-none border capitalize rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
-              name="name"
-              value={name}
-              type="text"
-              placeholder="Enter Your Full Name"
-            />
+      <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md space-y-8">
+          <div>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+              Create a new account
+            </h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+              Or{' '}
+              <Link
+                to="/login"
+                className="font-medium text-blue-600 hover:text-blue-500"
+              >
+                sign in to your account
+              </Link>
+            </p>
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-              Email
-            </label>
-            <input
-              onChange={handleOnChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
-              name="email"
-              value={email}
-              type="email"
-              placeholder="Enter Your E-mail"
-            />
-          </div>
-          <div className="mb-4 ">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-              Password
-            </label>
-            <input
-              onChange={handleOnChange}
-              className="shadow appearance-none border border-grey-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
-              name="password"
-              value={password}
-              type="password"
-              placeholder="******************"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
-              Confirm Password
-            </label>
-            <input
-              onChange={handleOnChange}
-              className="shadow appearance-none border border-grey-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={confirmPassword}
-              type="password"
-              placeholder="******************"
-            />
-          </div>
-          <div className="flex items-center mb-2 justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
+          <form
+            onSubmit={submitHandler}
+            className="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-lg"
+          >
+            <div className="rounded-md shadow-sm space-y-4">
+              <div>
+                <label htmlFor="name" className="sr-only">
+                  Full Name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  onChange={handleOnChange}
+                  value={name}
+                  className="appearance-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  placeholder="Full Name"
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  onChange={handleOnChange}
+                  value={email}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  placeholder="Email address"
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="sr-only">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  onChange={handleOnChange}
+                  value={password}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  placeholder="Password"
+                />
+              </div>
+              <div>
+                <label htmlFor="confirmPassword" className="sr-only">
+                  Confirm Password
+                </label>
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  onChange={handleOnChange}
+                  value={confirmPassword}
+                  className="appearance-none rounded-b-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  placeholder="Confirm Password"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between mt-6">
+              <button
+                type="submit"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Sign Up
+              </button>
+            </div>
+          </form>
+
+          <div className="text-center">
+            <Link
+              to="/signup-doctor"
+              className="font-medium text-blue-600 hover:text-blue-500"
             >
-              Sign Up
-            </button>
-
-            <Link to="/login" className="text-blue-500 hover:text-blue-600 text-center font-normal">
-          Already a User?
-        </Link>
-
+              Are you a doctor? Sign up here.
+            </Link>
           </div>
-        </form>
-        <p className="text-center text-gray-500 text-xs">©2024 HealthEase. All rights reserved.</p>
-
-        <Link to="/signup-doctor" className="mt-3 text-blue-500 hover:text-blue-600 text-center font-normal">
-          Are You a Doctor?
-        </Link>
-        
-        
+        </div>
       </div>
 
       <Footer />
-      
     </div>
   );
 }

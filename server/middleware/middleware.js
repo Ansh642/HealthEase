@@ -1,6 +1,7 @@
 const JWT = require('jsonwebtoken');
 require("dotenv").config();
 
+
 exports.auth = async (req, res, next) => {
     try {
         // Check if Authorization header exists
@@ -50,5 +51,3 @@ exports.isDoctor = async(req, res, next) => {
         });
     }
 }
-
-

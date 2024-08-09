@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 const Doctor = require("../models/Doctors");
 const Category = require("../models/Category");
+const Booking = require("../models/Booking");
 const {uploadImageToCloudinary} = require('../utils/imageUpload');
+const User = require('../models/User');
+
 require("dotenv").config();
 const bcrypt  =require("bcrypt");
-const User = require('../models/User');
 
 exports.createDoctor = async(req,res)=>{
     try{
@@ -202,35 +204,108 @@ exports.getAppointments  =async(req, res)=>{
 }
   
 
-exports.completeAppointments = async(req,res)=>{
-    try{
-      const {id} = req.body;
-      const userId= req.user.id;
+exports.completeAppointments = async(req, res) => {
+  try {
+    const { id } = req.body; // booking id
+    const userId = req.user.id; // doctor id
 
-      //console.log(id,userId);
-  
-      const removeBooking = await Doctor.findByIdAndUpdate(userId,{
-        $pull:{
-          appointments: id,
-        }
-      }).exec();
+    // Remove booking from doctor's appointments
+    const removeBooking = await Doctor.findByIdAndUpdate(userId, {
+      $pull: {
+        appointments: id,
+      }
+    });
 
-      const removeBookingFromUser = await User.findById({id});
-      console.log(removeBookingFromUser);
-  
-      const deleteBooking = await Booking.findByIdAndDelete(id);
-  
-      return res.status(200).json({
-        success: true,
-        message: "Bookings successfully deleted",
-      });
-  
-    }
-    catch(err){
-      return res.status(500).json({
+    // Find the booking to get the user ID associated with it
+    const booking = await Booking.findById(id);
+    if (!booking) {
+      return res.status(404).json({
         success: false,
-        message: err.message
+        message: "Booking not found",
       });
     }
+
+    // Remove the booking from the user's bookings array
+    const removeBookingFromUser = await User.findByIdAndUpdate(booking.user, {
+      $pull: {
+        bookings: id,
+      }
+    });
+    
+    // Delete the booking
+    const deleteBooking = await Booking.findByIdAndDelete(id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Booking successfully deleted",
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
 }
+
+
+exports.sendMessages = async (req, res) => {
+
+  const { userId, message } = req.body;
+  const doctorId = req.user.id;
+
+  try {
+    
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Doctor not found' });
+    }
+
+    const newMessage = {
+      user: doctorId,
+      message: message,
+    };
+    user.messages.push(newMessage);
+    
+    
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Message sent successfully'
+     });
+  } 
+  catch (error) 
+  {
+    res.status(500).json({
+      success: false,
+      message: 'Server error' });
+  }
+
+};
+
   
+exports.getNotifications = async (req, res) => {
+  try {
+      const userId = req.user.id; // Assuming the authenticated user is a doctor
+      const user = await Doctor.findById(userId).populate('messages.user', 'name'); // Populate user details
+
+      if (!user) {
+          return res.status(404).json({ success: false, message: 'User not found' });
+      }
+
+      res.status(200).json({ 
+          success: true, 
+          messages: user.messages.map(msg => ({
+              _id: msg._id,
+              message: msg.message,
+              user: msg.user?.name,
+              userId: msg.user,
+              timestamp: msg.createdAt
+          })) 
+      });
+  } catch (error) {
+      console.error('Error fetching messages:', error.message);
+      res.status(500).json({ success: false, message: 'Server error' });
+  }
+};

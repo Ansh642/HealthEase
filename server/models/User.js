@@ -25,6 +25,21 @@ const userSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Booking", 
     }],
+    messages: [{
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Doctor",
+        },
+        message: {
+          type: String,
+          required: true,
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+            expires: '3d', 
+          },
+      }],
 });
 
 module.exports = mongoose.model("User", userSchema);

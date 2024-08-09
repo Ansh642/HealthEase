@@ -9,6 +9,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const {auth,setauth} = useContext(AppContext);
   const [show, setShow] = useState(false);
+  
 
   const menu=[
     {
@@ -52,6 +53,16 @@ export default function Navbar() {
     }
   }
 
+  const handler2 = (e)=>{
+    setShow(false);
+    if(auth.user.years){
+      navigate("/doctor-messages");
+    }
+    else{
+      navigate("/user-messages");
+    }
+  }
+
   return (
 
     <div className='flex gap-7 items-center justify-between shadow-md w-full px-24 h-[65px]'>
@@ -76,21 +87,21 @@ export default function Navbar() {
     <div>
     {
       auth?.token ? (
-        <>
+        <div className='flex flex-row cursor-pointer gap-6 items-center'>
           <div className="flex items-center cursor-pointer">
             <img src={auth.user?.image} alt="" className="rounded-full h-9 w-9 object-contain mr-10" onClick={() => setShow(!show)} />
           </div>
 
-          <div className={`w-36 h-28 bg-white border-[1px] border-gray-300 shadow-lg z-30 right-16 absolute rounded-lg px-1 py-1 visible top-14 cursor-pointer ${show === true ? `visible` : `invisible`}`}>
+          <div className={`w-36 h-40 bg-white border-[1px] border-gray-300 shadow-lg z-30 right-16 absolute rounded-lg px-1 py-1 visible top-14 cursor-pointer ${show === true ? `visible` : `invisible`}`}>
             <div className='flex flex-col gap-2 justify-start px-1 py-1 text-lg mt-2 '>
 
-            <p className="text-blue-700 hover:bg-blue-100 rounded-lg px-2 py-1" onClick={handler}>Bookings</p>
+            <p className="text-blue-700 hover:bg-blue-100 rounded-lg px-2 py-1" onClick={handler}>My Bookings</p>
+            <p className="text-blue-700 hover:bg-blue-100 rounded-lg px-2 py-1" onClick={handler2}>My Messages</p>
             <p className="text-blue-700 hover:bg-blue-100 rounded-lg px-2 py-1" onClick={logoutHandler}>Log out</p>
-            
             </div>
           </div>
 
-        </>
+        </div>
       ) : (
         <>
           <button
@@ -104,7 +115,6 @@ export default function Navbar() {
     }
 
     </div>
-
     
     </div>
     
