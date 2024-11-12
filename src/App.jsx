@@ -31,7 +31,7 @@ function App() {
        <Route path='/doctor/:id' element={<DoctorFilter/>}/>
        <Route path='/explore' element={<Explore/>}/>
        <Route path='/contact' element={<ContactUs/>}/>
-       <Route path='/search' element={<SearchFilter/>}/>
+       <Route path='/search/:id' element={<SearchFilter/>}/>
 
        <Route path="/" element={<Private/>}> 
          <Route path='bookings' element={<Booking/>}/>

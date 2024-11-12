@@ -31,8 +31,7 @@ export default function Category() {
         setdoctor({
           doctors:response.data.similarDoctors,
         })
-        
-        navigate("/search");
+        navigate(`search/${response.data.similarDoctors[0]._id}`);
       }
 
       else{
